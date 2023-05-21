@@ -5,6 +5,7 @@ let canvasWidth = 900;
 let canvasHeight = 600;
 let snakee;
 let blockSize = 30;
+let applee;
 window.onload = function (){
     init();
    function init(){canvas = document.createElement('canvas');
@@ -14,6 +15,7 @@ window.onload = function (){
        document.body.appendChild(canvas);
        ctx = canvas.getContext('2d');
        snakee = new Snake([[6,4], [5,4], [4,4]], "right");
+       applee = new Apple([10, 10]);
        refreshCanvas();
 
    }
@@ -22,6 +24,7 @@ window.onload = function (){
        ctx.clearRect(0,0, canvas.width, canvas.height);
        snakee.advance();
        snakee.draw();
+       applee.draw()
        setTimeout(refreshCanvas, delay);
    }
 
@@ -81,6 +84,21 @@ window.onload = function (){
            }
        };
    }
+}
+
+function Apple(position){
+    this.position = position
+    this.draw = function (){
+      ctx.save();
+      ctx.fillStyle = "green";
+      ctx.beginPath();
+      let radius = blockSize/2;
+      let x = position[0]*blockSize + radius;
+      let y = position[1]*blockSize +radius;
+      ctx.arc(x, y, radius, 0, Math.PI*2, true);
+      ctx.fill();
+      ctx.restore();
+    };
 }
 
 document.onkeydown=function handleKeyDown(e){
