@@ -1,11 +1,13 @@
 let canvas;
 let ctx;
-let delay = 1000;
+let delay = 200;
 let canvasWidth = 900;
 let canvasHeight = 600;
 let snakee;
 let blockSize = 30;
 let applee;
+let widthInBlock = canvasWidth/blockSize;
+let heightInBlock = canvasHeight/blockSize;
 window.onload = function (){
     init();
    function init(){canvas = document.createElement('canvas');
@@ -21,11 +23,15 @@ window.onload = function (){
    }
 
    function refreshCanvas(){
-       ctx.clearRect(0,0, canvas.width, canvas.height);
        snakee.advance();
-       snakee.draw();
-       applee.draw()
-       setTimeout(refreshCanvas, delay);
+       if (snakee.checkCollision()){
+           //GAME OVER
+       }else {
+           ctx.clearRect(0,0, canvas.width, canvas.height);
+           snakee.draw();
+           applee.draw()
+           setTimeout(refreshCanvas, delay);
+       }
    }
 
    function drawBlock(ctx, position){
@@ -82,6 +88,32 @@ window.onload = function (){
            if (allowedDirections.indexOf(newDirection > -1 )){
                this.direction = newDirection;
            }
+       };
+       this.checkCollision = function (){
+           let wallCollision = false;
+           let snakeCollision = false;
+           let head = this.body[0];
+           let rest = this.body.slice(1);
+           let snakeX = head[0];
+           let snakeY = head[1];
+           let minX = 0;
+           let minY = 0;
+           let maxX = widthInBlock -1;
+           let maxY = heightInBlock -1;
+           let isNotBetweenHorizontalWalls = snakeX < minX || snakeX>maxX;
+           let isNotBetweenVerticalWalls = snakeY < minY || snakeY>maxY;
+
+           if (isNotBetweenHorizontalWalls || isNotBetweenVerticalWalls){
+               wallCollision = true;
+           }
+
+           for (let i = 0; i<rest.length; i++){
+               if (snakeX ===rest[i][0] && snakeY ===rest[i][1]){
+                   snakeCollision = true;
+               }
+           }
+
+           return wallCollision || snakeCollision;
        };
    }
 }
