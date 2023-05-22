@@ -8,6 +8,7 @@ let blockSize = 30;
 let applee;
 let widthInBlock = canvasWidth/blockSize;
 let heightInBlock = canvasHeight/blockSize;
+let score;
 window.onload = function (){
     init();
    function init(){canvas = document.createElement('canvas');
@@ -18,6 +19,7 @@ window.onload = function (){
        ctx = canvas.getContext('2d');
        snakee = new Snake([[6,4], [5,4], [4,4], [3,4]], "right");
        applee = new Apple([10, 10]);
+       score = 0;
        refreshCanvas();
 
    }
@@ -25,10 +27,11 @@ window.onload = function (){
    function refreshCanvas(){
        snakee.advance();
        if (snakee.checkCollision()){
-           //GAME OVER
+           gameOver();
        }else {
            if (snakee.isEatingApple(applee)){
                snakee.ateApple = true;
+               score++;
                do {
                    applee.setNewPosition();
                } while (applee.isOnSnake(snakee));
@@ -36,13 +39,31 @@ window.onload = function (){
            ctx.clearRect(0,0, canvas.width, canvas.height);
            snakee.draw();
            applee.draw()
+           drawScore();
            setTimeout(refreshCanvas, delay);
        }
    }
 
    function gameOver(){
-
+       ctx.save();
+       ctx.fillText("Game over", 5, 15);
+       ctx.fillText("Appuyez sur la touche espace pour rejouer !", 5, 30);
+       ctx.restore();
    }
+
+   function restart(){
+       snakee = new Snake([[6,4], [5,4], [4,4], [3,4]], "right");
+       applee = new Apple([10, 10]);
+       score = 0;
+       refreshCanvas();
+   }
+
+   function drawScore(){
+       ctx.save();
+       ctx.fillText(score.toString(), 5, canvasHeight-5);
+       ctx.restore();
+   }
+
    function drawBlock(ctx, position){
        let x= position[0] * blockSize;
        let y= position[1] * blockSize;
@@ -144,6 +165,31 @@ window.onload = function (){
            return head[0] === appleToEat.position[0] && head[1] === appleToEat.position[1];
        };
    }
+
+    document.onkeydown=function handleKeyDown(e){
+        let key = e.code;
+        let newDirection;
+        switch (key){
+            case "ArrowLeft":
+                newDirection = "left";
+                break;
+            case "ArrowUp":
+                newDirection = "up";
+                break;
+            case "ArrowRight":
+                newDirection = "right"
+                break;
+            case "ArrowDown":
+                newDirection = "down"
+                break;
+            case "Space":
+                restart();
+                return;
+            default:
+                return;
+        }
+        snakee.setDirection(newDirection);
+    }
 }
 
 function Apple(position){
@@ -174,30 +220,8 @@ function Apple(position){
         }
         return isOnSnake;
     };
-
 }
 
-document.onkeydown=function handleKeyDown(e){
-    let key = e.code;
-    let newDirection;
-    switch (key){
-        case "ArrowLeft":
-            newDirection = "left";
-            break;
-        case "ArrowUp":
-            newDirection = "up";
-            break;
-        case "ArrowRight":
-            newDirection = "right"
-            break;
-        case "ArrowDown":
-            newDirection = "down"
-            break;
-        default:
-            return;
-    }
-    snakee.setDirection(newDirection);
-}
 
 
 
