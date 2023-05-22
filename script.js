@@ -27,6 +27,10 @@ window.onload = function (){
        if (snakee.checkCollision()){
            //GAME OVER
        }else {
+           if (snakee.isEatingApple(applee)){
+               //LE SERPENT A GRAILLE LA POMME
+               applee.setNewPosition()
+           }
            ctx.clearRect(0,0, canvas.width, canvas.height);
            snakee.draw();
            applee.draw()
@@ -85,7 +89,17 @@ window.onload = function (){
                default:
                    throw ("Invalid Direction");
            }
-           if (allowedDirections.indexOf(newDirection > -1 )){
+           if (allowedDirections.indexOf(newDirection) > -1) {
+               this.direction = newDirection;
+           }
+           let oppositeDirections = {
+               left: "right",
+               right: "left",
+               up: "down",
+               down: "up"
+           };
+
+           if (newDirection !== oppositeDirections[this.direction]) {
                this.direction = newDirection;
            }
        };
@@ -115,22 +129,35 @@ window.onload = function (){
 
            return wallCollision || snakeCollision;
        };
+
+       this.isEatingApple = function (appleToEat){
+           let head = this.body[0];
+           if (head[0]===appleToEat.position[0] && head[1]===appleToEat.position[1])
+               return true;
+           else return false;
+       };
    }
 }
 
 function Apple(position){
-    this.position = position
+    this.position = position;
     this.draw = function (){
       ctx.save();
       ctx.fillStyle = "green";
       ctx.beginPath();
       let radius = blockSize/2;
-      let x = position[0]*blockSize + radius;
-      let y = position[1]*blockSize +radius;
+      let x = this.position[0]*blockSize + radius;
+      let y = this.position[1]*blockSize +radius;
       ctx.arc(x, y, radius, 0, Math.PI*2, true);
       ctx.fill();
       ctx.restore();
     };
+    this.setNewPosition = function (){
+        let newX = Math.round(Math.random()*(widthInBlock -1));
+        let newY = Math.round(Math.random()*(heightInBlock -1));
+        this.position = [newX, newY];
+    }
+
 }
 
 document.onkeydown=function handleKeyDown(e){
