@@ -40,6 +40,9 @@ window.onload = function (){
        }
    }
 
+   function gameOver(){
+
+   }
    function drawBlock(ctx, position){
        let x= position[0] * blockSize;
        let y= position[1] * blockSize;
