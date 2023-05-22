@@ -16,7 +16,7 @@ window.onload = function (){
        canvas.style.border = "1px solid";
        document.body.appendChild(canvas);
        ctx = canvas.getContext('2d');
-       snakee = new Snake([[6,4], [5,4], [4,4]], "right");
+       snakee = new Snake([[6,4], [5,4], [4,4], [3,4]], "right");
        applee = new Apple([10, 10]);
        refreshCanvas();
 
@@ -28,8 +28,10 @@ window.onload = function (){
            //GAME OVER
        }else {
            if (snakee.isEatingApple(applee)){
-               //LE SERPENT A GRAILLE LA POMME
-               applee.setNewPosition()
+               snakee.ateApple = true;
+               do {
+                   applee.setNewPosition();
+               } while (applee.isOnSnake(snakee));
            }
            ctx.clearRect(0,0, canvas.width, canvas.height);
            snakee.draw();
@@ -46,6 +48,7 @@ window.onload = function (){
    function Snake(body, direction){
        this.body = body;
        this.direction = direction
+       this.ateApple = false;
        this.draw = function(){
            ctx.save();
            ctx.fillStyle = "#ff0000";
@@ -73,7 +76,10 @@ window.onload = function (){
                    throw ("Invalid Direction");
            }
            this.body.unshift(nextPosition);
-           this.body.pop();
+           if (!this.ateApple)
+                this.body.pop();
+           else
+               this.ateApple = false;
        };
        this.setDirection = function (newDirection){
            let allowedDirections;
@@ -132,9 +138,7 @@ window.onload = function (){
 
        this.isEatingApple = function (appleToEat){
            let head = this.body[0];
-           if (head[0]===appleToEat.position[0] && head[1]===appleToEat.position[1])
-               return true;
-           else return false;
+           return head[0] === appleToEat.position[0] && head[1] === appleToEat.position[1];
        };
    }
 }
@@ -156,7 +160,17 @@ function Apple(position){
         let newX = Math.round(Math.random()*(widthInBlock -1));
         let newY = Math.round(Math.random()*(heightInBlock -1));
         this.position = [newX, newY];
-    }
+    };
+    this.isOnSnake = function (snakeToCheck){
+        let isOnSnake = false;
+        for (let i = 0;i<snakeToCheck.body.length; i++){
+            if (this.position[0]===snakeToCheck.body[i][0] &&
+                    this.position[1]===snakeToCheck.body[i][1]){
+                isOnSnake = true;
+            }
+        }
+        return isOnSnake;
+    };
 
 }
 
