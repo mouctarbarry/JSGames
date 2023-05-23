@@ -9,6 +9,7 @@ let applee;
 let widthInBlock = canvasWidth/blockSize;
 let heightInBlock = canvasHeight/blockSize;
 let score;
+let timeOut;
 window.onload = function (){
     init();
    function init(){canvas = document.createElement('canvas');
@@ -43,7 +44,8 @@ window.onload = function (){
            drawScore();
            snakee.draw();
            applee.draw()
-           setTimeout(refreshCanvas, delay);
+           timeOut = setTimeout(refreshCanvas, delay);
+
        }
    }
 
@@ -60,8 +62,8 @@ window.onload = function (){
        ctx.strokeText("Game Over", centerX, centerY -180);
 
        ctx.font = "bold 30px sans-serif";
-       ctx.strokeText("Appuyez sur la touche Espace pour rejouer !", centerX, centerY-120);
-       ctx.fillText("Appuyez sur la touche Espace pour rejouer !", centerX, centerY-120);
+       ctx.strokeText("Appuyez sur la touche Espace pour rejouer", centerX, centerY-120);
+       ctx.fillText("Appuyez sur la touche Espace pour rejouer", centerX, centerY-120);
        ctx.restore();
    }
 
@@ -69,6 +71,7 @@ window.onload = function (){
        snakee = new Snake([[6,4], [5,4], [4,4], [3,4]], "right");
        applee = new Apple([10, 10]);
        score = 0;
+       clearTimeout(timeOut);
        refreshCanvas();
    }
 
@@ -95,7 +98,7 @@ window.onload = function (){
        this.ateApple = false;
        this.draw = function(){
            ctx.save();
-           ctx.fillStyle = "#ff0000";
+           ctx.fillStyle = "#d52727";
            for (let i = 0; i < this.body.length; i++){
                drawBlock(ctx, this.body[i]);
            }
@@ -241,7 +244,6 @@ function Apple(position){
         return isOnSnake;
     };
 }
-
 
 
 
