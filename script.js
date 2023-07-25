@@ -18,7 +18,7 @@ window.onload = function (){
        canvas.style.border = "30px solid gray";
        canvas.style.margin = "50px auto";
        canvas.style.display = "block";
-       canvas.style.backgroundColor = "#ddd"
+       canvas.style.backgroundColor ="#B1C9E8"
        document.body.appendChild(canvas);
        ctx = canvas.getContext('2d');
        snakee = new Snake([[6,4], [5,4], [4,4], [3,4]], "right");
