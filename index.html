@@ -1,19 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="images/snake.png" type="image/x-icon">
-    <title>Snake game</title>
-    <script src="script.js"></script>
-    <style>
-        body { background: radial-gradient(circle at center, azure, lightblue);}
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Snake — le classique revisite avec un design neon moderne">
+  <meta name="theme-color" content="#0a0e1a">
+  <title>Snake — snake.mouctar.fr</title>
+  <link rel="icon" href="images/snake.png">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0e1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      color: #fff;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: none;
+    }
+
+    canvas {
+      border-radius: 12px;
+      box-shadow:
+        0 0 40px rgba(0, 255, 136, 0.08),
+        0 0 80px rgba(0, 255, 136, 0.04);
+    }
+
+    #hint {
+      position: fixed;
+      bottom: 16px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.25);
+      text-align: center;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-
-<p style="text-align: center; font-family: sans-serif; font-size: 15px;">Utilisez les touches directionnelles <br>
-    de votre clavier pour diriger le serpent</p>
-
+  <canvas id="game"></canvas>
+  <div id="hint"></div>
+  <script src="game.js"></script>
 </body>
 </html>
